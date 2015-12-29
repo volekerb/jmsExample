@@ -1,1 +1,1 @@
-# jmsExample
+# Simple realization of JMS
