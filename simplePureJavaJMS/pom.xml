@@ -26,6 +26,28 @@
             <artifactId>javax.jms-api</artifactId>
             <version>2.0</version>
         </dependency>
+        <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jboss-client</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-remote-naming</artifactId>
+            <version>2.0.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-nio</artifactId>
+            <version>3.0.3.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.messaging.mq</groupId>
+            <artifactId>imq</artifactId>
+            <version>4.6-b01</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>

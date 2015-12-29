@@ -1,40 +1,34 @@
-import javax.annotation.Resource;
 import javax.jms.*;
-import javax.naming.Context;
-import javax.naming.NamingException;
-import java.util.Queue;
-import java.util.logging.Logger;
 
 public class Producer {
 
-    private static final Logger log = Logger.getLogger(Producer.class.getName());
+    public static void sendMessage() {
 
-    public static void main(String[] args) throws NamingException, JMSException {
-        Connection connection = null;
         try {
-            System.out.println("Create JNDI Context");
-            Context context = JNDIcontext.getInitialContext();
-            System.out.println("Get connection facory");
-            ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("ConnectionFactory");
-            System.out.println("Create connection");
-            connection = connectionFactory.createConnection();
-            System.out.println("Create session");
-            Session session = connection.createSession(false, QueueSession.AUTO_ACKNOWLEDGE);
-            System.out.println("Lookup queue");
-            Queue queue = (Queue) context.lookup("/queue/HelloWorldQueue");
-            System.out.println("Start connection");
+            ConnectionFactory cf = new com.sun.messaging.ConnectionFactory();
+            Connection connection = cf.createConnection();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination destination = session.createTopic("Kakashka");
+            MessageProducer producer = session.createProducer(destination);
             connection.start();
-            System.out.println("Create producer");
-            MessageProducer producer = session.createProducer((Destination) queue);
-            System.out.println("Create hello world message");
-            Message hellowWorldText = session.createTextMessage("Hello World!");
-            System.out.println("Send hello world message");
-            producer.send(hellowWorldText);
-        } finally {
-            if (connection != null) {
-                System.out.println("close the connection");
-                connection.close();
-            }
+
+            TextMessage message = session.createTextMessage();
+            message.setText("Caught Kakashka (" + System.currentTimeMillis() + ") from Producer");
+
+            System.out.println("Sent from Producer");
+            producer.send(message);
+
+            // close everything
+            producer.close();
+            session.close();
+            connection.close();
+
+        } catch (JMSException ex) {
+            System.out.println("Error = " + ex.getMessage());
         }
+    }
+
+    public static void main(String args[]) {
+        Producer.sendMessage();
     }
 }
