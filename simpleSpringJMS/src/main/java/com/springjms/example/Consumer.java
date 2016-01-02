@@ -2,6 +2,8 @@ package com.springjms.example;
 
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTextMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +12,12 @@ import javax.jms.*;
 @Service
 public class Consumer implements SessionAwareMessageListener {
 
+    private final Logger log = LoggerFactory.getLogger(Consumer.class);
+
     @Override
     public void onMessage(Message message, Session session) throws JMSException {
         // This is the received message
-        System.out.println("Received message: "+ message.toString());
+        log.info("Received message: "+ message.toString());
 
         ActiveMQTextMessage textMessage = new ActiveMQTextMessage();
         textMessage.setText("Acknowledgement: olololo! Kakashka received");

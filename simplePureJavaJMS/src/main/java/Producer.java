@@ -1,9 +1,12 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.jms.*;
 
 public class Producer {
 
     public static void sendMessage() {
-
+        final Logger log = LoggerFactory.getLogger(Producer.class);
         try {
             ConnectionFactory cf = new com.sun.messaging.ConnectionFactory();
             Connection connection = cf.createConnection();
@@ -13,18 +16,14 @@ public class Producer {
             connection.start();
 
             TextMessage message = session.createTextMessage();
-            message.setText("Caught Kakashka (" + System.currentTimeMillis() + ") from Producer");
-
-            System.out.println("Sent from Producer");
+            log.info("Caught Kakashka (" + System.currentTimeMillis() + ") from Producer");
+            log.info("Sent from Producer");
             producer.send(message);
-
-            // close everything
             producer.close();
             session.close();
             connection.close();
-
         } catch (JMSException ex) {
-            System.out.println("Error = " + ex.getMessage());
+            log.warn("Error = " + ex.getMessage());
         }
     }
 
